@@ -11,12 +11,12 @@
 #[macro_export]
 macro_rules! read {
   () => ({
-    read!(0)
+    read!(ffi::BUFF)
   });
-  ($ins: expr) => ({
-    read!($ins, ffi::BUFF)
+  ($len: expr) => ({
+    read!($len, 0)
   });
-  ($ins: expr, $len: expr) => ({
+  ($len: expr, $ins: expr) => ({
     let line: [ffi::c_char; ffi::BUFF] = [0; ffi::BUFF];
 
     match unsafe {
