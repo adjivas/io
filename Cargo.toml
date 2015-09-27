@@ -1,0 +1,10 @@
+[package]
+name = "readline"
+version = "0.1.0"
+authors = ["adjivas <adjivas@users.noreply.github.com>"]
+description = "ffi library of lseek(2) and read(2)"
+license = "gpl-3.0"
+repository = "https://github.com/adjivas/readline"
+
+[dependencies.libc]
+version = "*"
