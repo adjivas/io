@@ -31,3 +31,31 @@ macro_rules! read {
     }
   });
 }
+
+
+/// The `read` macro reads the input and
+/// returns None or a tuple (len, text).
+
+#[macro_export]
+macro_rules! ioctl {
+  () => ({
+    let mut term = Box::new(ffi::Termios {
+      c_iflag: 0,
+      c_oflag: 0,
+      c_cflag: 0,
+      c_lflag: 0,
+      c_line: 0,
+      c_cc: [0; ffi::NCCS],
+      c_ispeed: 0,
+      c_ospeed: 0,
+    });
+
+    ioctl!(ffi::TCGETA, &mut *term);
+    term
+  });
+  ($req: expr, $term: expr) => ({
+    unsafe {
+      ffi::ioctl(ffi::STDIN_FILENO, $req, $term)
+    }
+  });
+}
