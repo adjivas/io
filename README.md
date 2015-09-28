@@ -1,4 +1,4 @@
-# Read-line
+# Read-LINE
 
 [![Build Status](https://travis-ci.org/adjivas/read-line.svg)](https://travis-ci.org/adjivas/read-line)
 [![GPLv3 License](http://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
