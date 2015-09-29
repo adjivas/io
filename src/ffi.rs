@@ -183,14 +183,16 @@ pub const TCSBRK:c_ulong = 0x5409;
 pub const TCXONC:c_ulong = 0x540a;
 pub const TCFLSH:c_ulong = 0x540b;
 
+/// The `C` extern is list of system call from termcaps required
+/// by the password input.
+
 #[cfg(any(unix))]
 extern "C" {
   pub fn ioctl(fd: c_int, req: c_ulong, term: *mut Termios) -> c_int;
-  pub fn write(fd: c_int, buf: *const c_char, len: size_t) -> ssize_t;
 }
 
 /// The `C` extern is list of system call from libc required
-/// by the library.
+/// by the standard input.
 
 #[cfg(any(unix))]
 extern "C" {

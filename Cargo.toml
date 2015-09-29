@@ -6,9 +6,5 @@ description = "ffi library of lseek(2) and read(2)"
 license = "gpl-3.0"
 repository = "https://github.com/adjivas/readline"
 
-[lib]
-name = "readline"
-path = "src/lib.rs"
-
 [dependencies.libc]
 version = "*"

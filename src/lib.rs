@@ -8,3 +8,22 @@
 #[macro_use]
 pub mod macros;
 pub mod ffi;
+
+/// The `sentence` function reads returns None
+/// or the tuple (len, sentence).
+
+pub fn sentence (
+) -> Option<(i64, [ffi::c_char; ffi::BUFF])> {
+  let line: [ffi::c_char; ffi::BUFF] = [0; ffi::BUFF];
+
+  match unsafe {
+    ffi::read (
+      ffi::STDIN_FILENO,
+      line.as_ptr() as *mut ffi::c_char,
+      ffi::BUFF as u64,
+    )
+  } {
+    -1 => None,
+    ret => Some((ret, line)),
+  }
+}

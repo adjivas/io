@@ -8,14 +8,5 @@
 extern crate readline;
 
 fn main () {
-  let test = readline::ffi::BUFF;
-
-  let line = *b"a\n";
-  unsafe {
-    readline::ffi::read(
-      1,
-      line.as_ptr() as *mut readline::ffi::c_char,
-      2 as readline::ffi::size_t,
-    )
-  };
+  let test = readline::sentence();
 }
