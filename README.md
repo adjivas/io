@@ -22,10 +22,13 @@ Readline
 |__ Cargo.toml
 |__ LICENSE
 |__ README.md
+|__ examples
+|   |__ sentence.rs
+|   \__ password.rs
 \__ src
     |__ ffi.rs
     |__ macros.rs
-    \__ main.rs
+    \__ lib.rs
 ```
 
 #### License:
