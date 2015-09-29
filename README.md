@@ -24,7 +24,8 @@ Readline
 |__ README.md
 |__ examples
 |   |__ sentence.rs
-|   \__ password.rs
+|   |__ password.rs
+|   \__ number.rs
 \__ src
     |__ ffi.rs
     |__ macros.rs

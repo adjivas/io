@@ -8,5 +8,5 @@
 extern crate readline;
 
 fn main () {
-  let test = readline::sentence();
+  let example = readline::text();
 }
