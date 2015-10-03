@@ -11,10 +11,9 @@
 pub mod macros;
 pub mod ffi;
 
-/// The `text` function reads and returns None
-/// or the tuple (len, line).
+/// The `line` function reads and returns the tuple (len, line).
 
-pub fn text (
+pub fn line (
 ) -> Option<(i64, [ffi::c_char; ffi::BUFF])> {
   let line: [ffi::c_char; ffi::BUFF] = [0; ffi::BUFF];
 
@@ -30,25 +29,47 @@ pub fn text (
   }
 }
 
-/// The `number` function calls the text function and
-/// parses a integer.
+/// The `character` function reads and returns only one character.
 
-pub fn number (
-) -> Option<(i64)> {
-  match self::text() {
-    Some((_, line)) => {
-      fn f (target: *const i8, acc: i64) -> i64 {
-        unsafe {
-          match {
-            *target.as_ref().unwrap() as i64 - 48
-          } {
-            n @ 0 ... 9 => f(target.offset(1), acc * 10 + n),
-            _ => acc,
-          }
-        }
-      }
-      Some(f(line.as_ptr(), 0))
-    },
-    None => None ,
+pub fn one_char (
+) -> Option<[ffi::c_char; 1]> {
+  let chr: [ffi::c_char; 1] = [0; 1];
+
+  match unsafe {
+    ffi::read (
+      ffi::STDIN_FILENO,
+      chr.as_ptr() as *mut ffi::c_char,
+      1,
+    )
+  } {
+    -1 => None,
+    _ => Some(chr),
   }
+}
+
+/// The `number_at` function reads character by character and
+/// returns a integer between 0 and u64::MAX + the first acc.
+
+fn number_at (
+  acc: u64
+) -> Option<(u64)> {
+  match self::one_char() {
+    Some(number) => match {
+      unsafe {
+        *number.as_ptr().as_ref().unwrap() as u8 as char
+      }
+    } {
+      n @ '0' ... '9' => number_at(acc * 10 + n as u64 - 48),
+      _ => Some(acc),
+    },
+    None => None,
+  }
+}
+
+/// The `natural_number` function reads character by character and
+/// returns a integer between 0 and u64::MAX.
+
+pub fn natural_number (
+) -> Option<(u64)> {
+  number_at(0)
 }

@@ -35,11 +35,7 @@ macro_rules! write {
 }
 
 fn main () {
-  let number = readline::natural_number().unwrap();
+  let (len, line) = readline::line().unwrap();
 
-  println!("{}", number);
-
-  let (len, text) = readline::line().unwrap();
-
-  write!(&text, len);
+  write!(&line, len);
 }

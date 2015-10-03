@@ -183,6 +183,10 @@ pub const TCSBRK:c_ulong = 0x5409;
 pub const TCXONC:c_ulong = 0x540a;
 pub const TCFLSH:c_ulong = 0x540b;
 
+pub const SEEK_SET:c_int = 0;
+pub const SEEK_CUR:c_int = 1;
+pub const SEEK_END:c_int = 2;
+
 /// The `C` extern is list of system call from termcaps required
 /// by the password input.
 
