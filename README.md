@@ -1,13 +1,19 @@
-# In/Out put
+# In/Out-Put
 
 [![Build Status](https://travis-ci.org/adjivas/io.svg)](https://travis-ci.org/adjivas/io)
 [![GPLv3 License](http://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
 
-#### How to install:
+#### How to build:
 ```shell
 git clone https://github.com/adjivas/io.git io && cd io
 cargo build
 ```
+
+#### How to use:
+* cargo run --example char < <(echo 'a')
+* cargo run --example line < <(echo "hello")
+* cargo run --example number < <(echo 42)
+* cargo run --example number < <(echo $SECRET)
 
 #### Cargo'git-Dependencies:
 ```shell
@@ -23,10 +29,10 @@ cargo build
 |__ LICENSE
 |__ README.md
 |__ examples
-|   |__ character.rs
+|   |__ char.rs
 |   |__ line.rs
-|   |__ number.rs
-|   \__ pass.rs
+|   |__ pass.rs
+|   \__ number.rs
 \__ src
     |__ ffi.rs
     |__ macros.rs

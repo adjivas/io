@@ -9,13 +9,17 @@
 extern crate io;
 
 fn main () {
-  let mut term = ioctl!();
+    let mut term = ioctl!(0x8a73);
 
-  term.c_lflag = 0x8a73;
-  ioctl!(io::ffi::TCSETS, &mut *term);
+    ioctl!(io::ffi::TermiosControl::SETS, &mut *term);
+    if let Some((len, text)) = read!() {
+        term.c_lflag = 0x8a3b;
 
-  let (len, text):(i64, [i8; io::ffi::BUFF]) = read!().unwrap();
-
-  term.c_lflag = 0x8a3b;
-  ioctl!(io::ffi::TCSETAW, &mut *term);
+        ioctl!(io::ffi::TermiosControl::SETAW, &mut *term);
+        write!(&text, len);
+    }
+    else {
+        term.c_lflag = 0x8a3b;
+        ioctl!(io::ffi::TermiosControl::SETAW, &mut *term);
+    }
 }

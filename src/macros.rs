@@ -16,13 +16,11 @@ macro_rules! write {
   ($text: expr, $len: expr, $out: expr) => ({
     match unsafe {
         io::ffi::write (
-            $out,
-            $text as *const io::ffi::c_char,
-            $len as io::ffi::size_t
+            $out, $text as *const io::ffi::c_char, $len as io::ffi::size_t
         )
     } {
-      -1 => None,
-      _ => Some(0i32),
+      -1 => false,
+      _ => true,
     }
   });
 }
@@ -101,24 +99,35 @@ macro_rules! read_number {
 
 #[macro_export]
 macro_rules! ioctl {
-  () => ({
-    let mut term = Box::new(ffi::Termios {
-      c_iflag: 0,
-      c_oflag: 0,
-      c_cflag: 0,
-      c_lflag: 0,
-      c_line: 0,
-      c_cc: [0; ffi::NCCS],
-      c_ispeed: 0,
-      c_ospeed: 0,
-    });
+    () => ({
+        let mut term = Box::new(io::ffi::Termios {
+            c_iflag: 0,
+            c_oflag: 0,
+            c_cflag: 0,
+            c_lflag: 0,
+            c_line: 0,
+            c_cc: [0; io::ffi::NCCS],
+            c_ispeed: 0,
+            c_ospeed: 0,
+        });
 
-    ioctl!(ffi::TCGETA, &mut *term);
-    term
-  });
-  ($req: expr, $term: expr) => ({
-    unsafe {
-      ffi::ioctl(ffi::STDIN_FILENO, $req, $term)
-    }
-  });
+        ioctl!(io::ffi::TermiosControl::GETA, &mut *term);
+        term
+
+    });  
+    ($control: expr) => ({
+        let mut term = ioctl!();
+
+        term.c_lflag = $control;
+        term
+    });
+    ($req: expr, $term: expr) => ({
+        unsafe {
+            io::ffi::ioctl (
+                io::ffi::STDIN_FILENO,
+                $req as u64,
+                $term,
+           )
+        }
+    });
 }

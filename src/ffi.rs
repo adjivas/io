@@ -31,20 +31,20 @@ pub const NCCS:usize = 32;
 /// The `BUFF` and `STDIN_FILENO` const
 /// are default values for macros.
 
-pub const BUFF: usize = 1024;
+pub const BUFF: usize = 2048;
 pub const STDIN_FILENO: c_int = libc::consts::os::posix88::STDIN_FILENO;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct Termios {
-  pub c_iflag: tcflag_t, // input mode flags.
-  pub c_oflag: tcflag_t, // output mode flags.
-  pub c_cflag: tcflag_t, // control mode flags.
-  pub c_lflag: tcflag_t, // local mode flags.
-  pub c_line: cc_t,      // line discipline.
-  pub c_cc: [cc_t; NCCS],  // control characters.
-  pub c_ispeed: speed_t, // input speed.
-  pub c_ospeed: speed_t, // output speed.
+  pub c_iflag: tcflag_t,  // input mode flags.
+  pub c_oflag: tcflag_t,  // output mode flags.
+  pub c_cflag: tcflag_t,  // control mode flags.
+  pub c_lflag: tcflag_t,  // local mode flags.
+  pub c_line: cc_t,       // line discipline.
+  pub c_cc: [cc_t; NCCS], // control characters.
+  pub c_ispeed: speed_t,  // input speed.
+  pub c_ospeed: speed_t,  // output speed.
 }
 
 /// All the `const *` are default values
