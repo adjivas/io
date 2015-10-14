@@ -6,5 +6,10 @@
 // except according to those terms.
 
 #[macro_use]
-mod macros;
-pub mod ffi;
+extern crate io;
+
+fn main() {
+    if let Some(c) = read_character!() {
+        println!("{}", c);
+    }
+}

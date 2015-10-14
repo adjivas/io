@@ -1,11 +1,11 @@
-# Read-LINE
+# In/Out put
 
-[![Build Status](https://travis-ci.org/adjivas/read-line.svg)](https://travis-ci.org/adjivas/read-line)
+[![Build Status](https://travis-ci.org/adjivas/io.svg)](https://travis-ci.org/adjivas/io)
 [![GPLv3 License](http://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
 
 #### How to install:
 ```shell
-git clone https://github.com/adjivas/lem-ipc.git readline && cd readline
+git clone https://github.com/adjivas/io.git io && cd io
 cargo build
 ```
 
@@ -13,7 +13,7 @@ cargo build
 ```shell
   Libc
    |
-Readline
+   IO
 ```
 
 #### Directory-Tree:
@@ -33,4 +33,4 @@ Readline
 ```
 
 #### License:
-*read-line*'s code in this repo uses the [GNU GPL v3](http://www.gnu.org/licenses/gpl-3.0.html) [license](https://github.com/adjivas/read-line/blob/master/LICENSE).
+*io*'s code in this repo uses the [GNU GPL v3](http://www.gnu.org/licenses/gpl-3.0.html) [license](https://github.com/adjivas/io/blob/master/LICENSE).

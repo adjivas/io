@@ -1,6 +1,6 @@
 // @adjivas - github.com/adjivas. See the LICENSE
 // file at the top-level directory of this distribution and at
-// https://github.com/adjivas/read-line
+// https://github.com/adjivas/io
 //
 // This file may not be copied, modified, or distributed
 // except according to those terms.
@@ -23,10 +23,16 @@ pub type cc_t = libc::types::os::arch::c95::c_uchar; // bits/Termios'type.
 pub type speed_t = libc::types::os::arch::c95::c_uint; // bits/Termios'type.
 pub type tcflag_t = libc::types::os::arch::c95::c_uint; // bits/Termios'type.
 
-/// The `NCCS` const are default values
-/// of the struct `termios`.
+/// The `NCCS` const is the default number of character
+/// parsed by the password input.
 
 pub const NCCS:usize = 32;
+
+/// The `BUFF` and `STDIN_FILENO` const
+/// are default values for macros.
+
+pub const BUFF: usize = 1024;
+pub const STDIN_FILENO: c_int = libc::consts::os::posix88::STDIN_FILENO;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -162,44 +168,37 @@ pub enum LocalModes {
   ICANON = 0o000002,
 }
 
-/// The `BUFF` and `STDIN_FILENO` const
-/// are default values for macros.
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub enum TermiosControl {
+    GETS  = 0x5401,
+    SETS  = 0x5402,
+    SETSW = 0x5403,
+    SETSF = 0x5404,
+    GETA  = 0x5405,
+    SETA  = 0x5406,
+    SETAW = 0x5407,
+    SETAF = 0x5408,
+    SBRK  = 0x5409,
+    XONC  = 0x540a,
+    FLSH  = 0x540b,
+}
 
-pub const BUFF: usize = 1024;
-pub const STDIN_FILENO: c_int = libc::consts::os::posix88::STDIN_FILENO;
-
-/// The `C` extern is list of system call from libc required
-/// by the library.
-
-pub const TCGETS:c_ulong = 0x5401;
-pub const TCSETS:c_ulong = 0x5402;
-pub const TCSETSW:c_ulong = 0x5403;
-pub const TCSETSF:c_ulong = 0x5404;
-pub const TCGETA:c_ulong = 0x5405;
-pub const TCSETA:c_ulong = 0x5406;
-pub const TCSETAW:c_ulong = 0x5407;
-pub const TCSETAF:c_ulong = 0x5408;
-pub const TCSBRK:c_ulong = 0x5409;
-pub const TCXONC:c_ulong = 0x540a;
-pub const TCFLSH:c_ulong = 0x540b;
-
-pub const SEEK_SET:c_int = 0;
-pub const SEEK_CUR:c_int = 1;
-pub const SEEK_END:c_int = 2;
-
-/// The `C` extern is list of system call from termcaps required
-/// by the password input.
-
-#[cfg(any(unix))]
-extern "C" {
-  pub fn ioctl(fd: c_int, req: c_ulong, term: *mut Termios) -> c_int;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub enum Seek {
+    SET = 0,
+    CUR = 1,
+    END = 2,
 }
 
 /// The `C` extern is list of system call from libc required
-/// by the standard input.
+/// by the standard in/out put.
 
 #[cfg(any(unix))]
 extern "C" {
-  pub fn lseek(fd: c_int, offset: off_t , whence: c_int) -> off_t;
-  pub fn read(fd: c_int, buf: *mut c_char, len: size_t) -> ssize_t;
+    pub fn write(fd: c_int, buf: *const c_char, len: size_t) -> ssize_t;
+    pub fn lseek(fd: c_int, offset: off_t , whence: c_int) -> off_t;
+    pub fn read(fd: c_int, buf: *mut c_char, len: size_t) -> ssize_t;
+    pub fn ioctl(fd: c_int, req: c_ulong, term: *mut Termios) -> c_int;
 }
