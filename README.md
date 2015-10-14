@@ -23,9 +23,10 @@ cargo build
 |__ LICENSE
 |__ README.md
 |__ examples
-|   |__ sentence.rs
-|   |__ password.rs
-|   \__ number.rs
+|   |__ character.rs
+|   |__ line.rs
+|   |__ number.rs
+|   \__ pass.rs
 \__ src
     |__ ffi.rs
     |__ macros.rs
