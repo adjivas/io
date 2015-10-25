@@ -5,8 +5,8 @@
 // This file may not be copied, modified, or distributed
 // except according to those terms.
 
-/// The `read` macro writes the output and returns the Some 0i32
-/// or None according to success.
+/// The `write` macro writes to output the text
+/// and returns the Some 0i32 or None according to success.
 
 #[macro_export]
 macro_rules! write {
@@ -16,7 +16,31 @@ macro_rules! write {
   ($text: expr, $len: expr, $out: expr) => ({
     match unsafe {
         io::ffi::write (
-            $out, $text as *const io::ffi::c_char, $len as io::ffi::size_t
+            $out,
+            $text as *const i8,
+            $len,
+        )
+    } {
+      -1 => false,
+      _ => true,
+    }
+  });
+}
+
+/// The `write_error` macro writes to output the error
+/// and returns the Some 0i32 or None according to success.
+
+#[macro_export]
+macro_rules! write_error {
+  ($text: expr, $len: expr) => ({
+    write!($text, $len, 2)
+  });
+  ($text: expr, $len: expr, $out: expr) => ({
+    match unsafe {
+        io::ffi::write (
+            $out,
+            $text as *const i8,
+            $len,
         )
     } {
       -1 => false,
@@ -37,13 +61,13 @@ macro_rules! read {
     read!($len, 0)
   });
   ($len: expr, $ins: expr) => ({
-    let line: [io::ffi::c_char; io::ffi::BUFF] = [0; io::ffi::BUFF];
+    let line: [i8; io::ffi::BUFF] = [0; io::ffi::BUFF];
 
     match unsafe {
       io::ffi::read (
-        $ins as io::ffi::c_int,
-        line.as_ptr() as *mut io::ffi::c_char,
-        $len as io::ffi::size_t,
+        $ins,
+        line.as_ptr() as *mut i8,
+        $len as i32,
       )
     } {
       -1 => None,
@@ -91,6 +115,33 @@ macro_rules! read_number {
             }
         }
         result($start as i64)
+    });
+}
+
+
+/// The `read_command` macro reads and
+/// returns the addition of all letter.
+
+#[macro_export]
+macro_rules! read_command {
+    () => ({
+        match {
+            read_character!()
+        } {
+            Some(47) => Some(read_command!(0u64)),
+            _ => None ,
+        }
+    });
+    ($start: expr) => ({
+        fn result (acc: u64) -> u64 {
+            match {
+                read_character!()
+            } {
+                Some(d @ 97...122) => result(acc + {d - 97i8} as u64),
+                _ => acc,
+            }
+        }
+        result($start as u64)
     });
 }
 

@@ -15,13 +15,6 @@ cargo build
 * cargo run --example number < <(echo 42)
 * cargo run --example number < <(echo $SECRET)
 
-#### Cargo'git-Dependencies:
-```shell
-  Libc
-   |
-   IO
-```
-
 #### Directory-Tree:
 ```shell
 .
@@ -32,7 +25,8 @@ cargo build
 |   |__ char.rs
 |   |__ line.rs
 |   |__ pass.rs
-|   \__ number.rs
+|   |__ number.rs
+|   \__ command.rs
 \__ src
     |__ ffi.rs
     |__ macros.rs

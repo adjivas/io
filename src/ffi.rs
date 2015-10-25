@@ -8,43 +8,28 @@
 #![allow(dead_code)]
 #![allow(non_camel_case_types)]
 
-extern crate libc;
-
-/// The `libc` type is the list of C types required
-/// and bits/termios.h.
-
-pub type off_t = libc::types::os::arch::posix88::off_t;
-pub type ssize_t = libc::types::os::arch::posix88::ssize_t;
-pub type size_t = libc::types::os::arch::c95::size_t;
-pub type c_int = libc::types::os::arch::c95::c_int;
-pub type c_char = libc::types::os::arch::c95::c_char;
-pub type c_ulong = libc::types::os::arch::c95::c_ulong;
-pub type cc_t = libc::types::os::arch::c95::c_uchar; // bits/Termios'type.
-pub type speed_t = libc::types::os::arch::c95::c_uint; // bits/Termios'type.
-pub type tcflag_t = libc::types::os::arch::c95::c_uint; // bits/Termios'type.
-
 /// The `NCCS` const is the default number of character
 /// parsed by the password input.
 
-pub const NCCS:usize = 32;
+pub const NCCS: usize = 32;
 
 /// The `BUFF` and `STDIN_FILENO` const
 /// are default values for macros.
 
 pub const BUFF: usize = 2048;
-pub const STDIN_FILENO: c_int = libc::consts::os::posix88::STDIN_FILENO;
+pub const STDIN_FILENO: i32 = 0;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct Termios {
-  pub c_iflag: tcflag_t,  // input mode flags.
-  pub c_oflag: tcflag_t,  // output mode flags.
-  pub c_cflag: tcflag_t,  // control mode flags.
-  pub c_lflag: tcflag_t,  // local mode flags.
-  pub c_line: cc_t,       // line discipline.
-  pub c_cc: [cc_t; NCCS], // control characters.
-  pub c_ispeed: speed_t,  // input speed.
-  pub c_ospeed: speed_t,  // output speed.
+  pub c_iflag: u32,  // input mode flags.
+  pub c_oflag: u32,  // output mode flags.
+  pub c_cflag: u32,  // control mode flags.
+  pub c_lflag: u32,  // local mode flags.
+  pub c_line: u8,       // line discipline.
+  pub c_cc: [u8; NCCS], // control characters.
+  pub c_ispeed: u32,  // input speed.
+  pub c_ospeed: u32,  // output speed.
 }
 
 /// All the `const *` are default values
@@ -197,8 +182,8 @@ pub enum Seek {
 
 #[cfg(any(unix))]
 extern "C" {
-    pub fn write(fd: c_int, buf: *const c_char, len: size_t) -> ssize_t;
-    pub fn lseek(fd: c_int, offset: off_t , whence: c_int) -> off_t;
-    pub fn read(fd: c_int, buf: *mut c_char, len: size_t) -> ssize_t;
-    pub fn ioctl(fd: c_int, req: c_ulong, term: *mut Termios) -> c_int;
+    pub fn write(fd: i32, buf: *const i8, len: i32) -> i32;
+    pub fn lseek(fd: i32, offset: u64, whence: i32) -> u64;
+    pub fn read(fd: i32, buf: *mut i8, len: i32) -> i32;
+    pub fn ioctl(fd: i32, req: u64, term: *mut Termios) -> i32;
 }
