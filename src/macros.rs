@@ -10,21 +10,22 @@
 
 #[macro_export]
 macro_rules! write {
-  ($text: expr, $len: expr) => ({
-    write!($text, $len, 1)
-  });
-  ($text: expr, $len: expr, $out: expr) => ({
-    match unsafe {
-        io::ffi::write (
-            $out,
-            $text as *const i8,
-            $len,
-        )
-    } {
-      -1 => false,
-      _ => true,
-    }
-  });
+    ($text: expr, $len: expr) => ({
+        write!($text, $len, 1)
+    });
+    ($text: expr, $len: expr, $out: expr) => ({
+        extern crate io;
+        match unsafe {
+            io::ffi::write (
+                $out as i32,
+                $text as *const i8,
+                $len as i32,
+            )
+        } {
+          -1 => false,
+          _ => true,
+        }
+    });
 }
 
 /// The `write_error` macro writes to output the error
@@ -32,21 +33,22 @@ macro_rules! write {
 
 #[macro_export]
 macro_rules! write_error {
-  ($text: expr, $len: expr) => ({
-    write!($text, $len, 2)
-  });
-  ($text: expr, $len: expr, $out: expr) => ({
-    match unsafe {
-        io::ffi::write (
-            $out,
-            $text as *const i8,
-            $len,
-        )
-    } {
-      -1 => false,
-      _ => true,
-    }
-  });
+    ($text: expr, $len: expr) => ({
+        write!($text, $len, 2)
+    });
+    ($text: expr, $len: expr, $out: expr) => ({
+        extern crate io;
+        match unsafe {
+            io::ffi::write (
+                $out,
+                $text as *const i8,
+                $len,
+            )
+        } {
+          -1 => false,
+          _ => true,
+        }
+    });
 }
 
 /// The `read` macro reads the input and returns None
@@ -54,26 +56,27 @@ macro_rules! write_error {
 
 #[macro_export]
 macro_rules! read {
-  () => ({
-    read!(io::ffi::BUFF)
-  });
-  ($len: expr) => ({
-    read!($len, 0)
-  });
-  ($len: expr, $ins: expr) => ({
-    let line: [i8; io::ffi::BUFF] = [0; io::ffi::BUFF];
+    () => ({
+        read!(io::ffi::BUFF)
+    });
+    ($len: expr) => ({
+        read!($len, 0)
+    });
+    ($len: expr, $ins: expr) => ({
+        extern crate io;
+        let line: [i8; io::ffi::BUFF] = [0; io::ffi::BUFF];
 
-    match unsafe {
-      io::ffi::read (
-        $ins,
-        line.as_ptr() as *mut i8,
-        $len as i32,
-      )
-    } {
-      -1 => None,
-      ret => Some((ret, line)),
-    }
-  });
+        match unsafe {
+          io::ffi::read (
+            $ins as i32,
+            line.as_ptr() as *mut i8,
+            $len as i32,
+          )
+        } {
+          -1 => None,
+          ret => Some((ret, line)),
+        }
+    });
 }
 
 
@@ -151,6 +154,7 @@ macro_rules! read_command {
 #[macro_export]
 macro_rules! ioctl {
     () => ({
+        extern crate io;
         let mut term = Box::new(io::ffi::Termios {
             c_iflag: 0,
             c_oflag: 0,
@@ -165,7 +169,7 @@ macro_rules! ioctl {
         ioctl!(io::ffi::TermiosControl::GETA, &mut *term);
         term
 
-    });  
+    });
     ($control: expr) => ({
         let mut term = ioctl!();
 
@@ -173,6 +177,7 @@ macro_rules! ioctl {
         term
     });
     ($req: expr, $term: expr) => ({
+        extern crate io;
         unsafe {
             io::ffi::ioctl (
                 io::ffi::STDIN_FILENO,
