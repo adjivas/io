@@ -45,7 +45,7 @@ macro_rules! write {
 /// and returns the Some 0i32 or None according to success.
 
 #[macro_export]
-macro_rules! write_error {
+macro_rules! write_err {
     ($text: expr) => ({
         let mut result: bool = false;
 
@@ -53,7 +53,7 @@ macro_rules! write_error {
             if unsafe {
                 *$text.offset(len as isize)
             } == 0u8 {
-                result = write_error!($text, len);
+                result = write_err!($text, len);
                 break ;
             }
         }
