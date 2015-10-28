@@ -41,6 +41,66 @@ macro_rules! write {
     });
 }
 
+/// The `writeln` macro writes to output the text with a breakline
+/// and returns the Some 0i32 or None according to success.
+
+#[macro_export]
+macro_rules! writeln {
+    ($text: expr) => ({
+        write!($text) && write!("\n".as_ptr(), 1)
+    });
+    ($text: expr, $len: expr) => ({
+        write!($text, $len) && write!("\n".as_ptr(), 1)
+    });
+    ($text: expr, $len: expr, $out: expr) => ({
+        write!($text, $len, $out) && write!("\n".as_ptr(), $out)
+    });
+}
+
+/// The `write_number` macro writes to output the number
+/// and returns the Some 0i32 or None according to success.
+
+#[macro_export]
+macro_rules! write_number {
+    ($number: expr) => ({
+        write_number!($number, 1)
+    });
+    ($number: expr, $out: expr) => ({
+        let mut decimal = $number;
+        let mut buf: [u8; 64] = [0; 64];
+        let mut result: bool = false;
+
+        for target in (0..64).rev() {
+            buf[target] = {decimal % 10 + 48} as u8;
+            decimal /= 10;
+            if decimal == 0 {
+                result = write! (
+                    buf.as_ptr().offset (
+                        target as isize
+                    ),
+                    64 - target,
+                    $out
+                );
+                break ;
+            }
+        }
+        result
+    });
+}
+
+/// The `writeln_number` macro writes to output the number with a breakline
+/// and returns the Some 0i32 or None according to success.
+
+#[macro_export]
+macro_rules! writeln_number {
+    ($number: expr) => ({
+        writeln_number!($number, 1)
+    });
+    ($number: expr, $out: expr) => ({
+        write_number!($number, $out) && write!("\n".as_ptr(), $out)
+    });
+}
+
 /// The `write_error` macro writes to output the error
 /// and returns the Some 0i32 or None according to success.
 
@@ -58,9 +118,6 @@ macro_rules! write_err {
             }
         }
         result
-    });
-    ($text: expr, $len: expr) => ({
-        write!($text, $len, 2)
     });
 }
 

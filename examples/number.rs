@@ -10,6 +10,6 @@ extern crate io;
 
 fn main() {
     if let Some(c) = read_number!() {
-        println!("{}", c);
+        writeln_number!(c);
     }
 }
