@@ -46,6 +46,19 @@ macro_rules! write {
 
 #[macro_export]
 macro_rules! write_error {
+    ($text: expr) => ({
+        let mut result: bool = false;
+
+        for len in 0i32..std::i32::MAX {
+            if unsafe {
+                *$text.offset(len as isize)
+            } == 0u8 {
+                result = write_error!($text, len);
+                break ;
+            }
+        }
+        result
+    });
     ($text: expr, $len: expr) => ({
         write!($text, $len, 2)
     });
