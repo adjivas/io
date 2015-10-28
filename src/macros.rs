@@ -53,7 +53,7 @@ macro_rules! writeln {
         write!($text, $len) && write!("\n".as_ptr(), 1)
     });
     ($text: expr, $len: expr, $out: expr) => ({
-        write!($text, $len, $out) && write!("\n".as_ptr(), $out)
+        write!($text, $len, $out) && write!("\n".as_ptr(), 1)
     });
 }
 
@@ -97,7 +97,7 @@ macro_rules! writeln_number {
         writeln_number!($number, 1)
     });
     ($number: expr, $out: expr) => ({
-        write_number!($number, $out) && write!("\n".as_ptr(), $out)
+        write_number!($number, $out) && write!("\n".as_ptr(), 1)
     });
 }
 
@@ -118,6 +118,19 @@ macro_rules! write_err {
             }
         }
         result
+    });
+    ($text: expr, $len: expr) => ({
+        write!($text, $len, 2)
+    });
+}
+
+/// The `writeln_error` macro writes to output the error
+/// and returns the Some 0i32 or None according to success.
+
+#[macro_export]
+macro_rules! writeln_err {
+    ($text: expr) => ({
+        write_err!($text) && write!("\n".as_ptr(), 1, 2)
     });
 }
 

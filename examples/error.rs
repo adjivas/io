@@ -9,5 +9,5 @@
 extern crate io;
 
 fn main() {
-    writeln!("hello world\0".as_ptr());;
+    writeln_err!("The error work\0".as_ptr());
 }
