@@ -10,6 +10,19 @@
 
 #[macro_export]
 macro_rules! write {
+    ($text: expr) => ({
+        let mut result: bool = false;
+
+        for len in 0i32..std::i32::MAX {
+            if unsafe {
+                *$text.offset(len as isize)
+            } == 0u8 {
+                result = write!($text, len);
+                break ;
+            }
+        }
+        result
+    });
     ($text: expr, $len: expr) => ({
         write!($text, $len, 1)
     });
@@ -35,19 +48,6 @@ macro_rules! write {
 macro_rules! write_error {
     ($text: expr, $len: expr) => ({
         write!($text, $len, 2)
-    });
-    ($text: expr, $len: expr, $out: expr) => ({
-        extern crate io;
-        match unsafe {
-            io::ffi::write (
-                $out,
-                $text as *const i8,
-                $len,
-            )
-        } {
-          -1 => false,
-          _ => true,
-        }
     });
 }
 
