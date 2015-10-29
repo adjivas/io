@@ -176,7 +176,6 @@ macro_rules! read_character {
     });
 }
 
-
 /// The `read_number` macro reads and
 /// returns the number.
 
@@ -192,21 +191,29 @@ macro_rules! read_number {
         }
     });
     ($start: expr) => ({
-        fn result (acc: i64) -> i64 {
+        read_number!($start, 17)
+    });
+    ($start: expr, $limit: expr) => ({
+        fn result (
+            acc: i64,
+            lim: usize
+        ) -> i64 {
             match {
-                read_character!()
+                (read_character!(), lim)
             } {
-                Some(d @ 48...57) => result({acc * 10i64} + {d - 48i8} as i64),
+                (Some(d @ 48...57), lim) if lim != 0 => result (
+                    {acc * 10i64} + {d - 48i8} as i64,
+                    lim - 1
+                ),
                 _ => acc,
             }
         }
-        result($start as i64)
+        result($start as i64, $limit)
     });
 }
 
-
 /// The `read_command` macro reads and
-/// returns the addition of all letter.
+/// returns the concat of all letter.
 
 #[macro_export]
 macro_rules! read_command {
@@ -214,20 +221,31 @@ macro_rules! read_command {
         match {
             read_character!()
         } {
-            Some(47) => Some(read_command!(0u64)),
+            Some(47) => read_command!(0u64),
             _ => None ,
         }
     });
     ($start: expr) => ({
-        fn result (acc: u64) -> u64 {
+        read_command!($start, 9)
+    });
+    ($start: expr, $limit: expr) => ({
+        fn result (
+            acc: u64,
+            lim: usize
+        ) -> Option<u64> {
             match {
-                read_character!()
+                (read_character!(), lim)
             } {
-                Some(d @ 97...122) => result(acc + {d - 97i8} as u64),
-                _ => acc,
+                (Some(d @  97...107), lim) if lim != 0 => {
+                    result(10 + acc * 100 + {d - 97i8} as u64, lim -1)
+                },
+                (Some(d @ 107...122), lim) if lim != 0 => {
+                    result(20 + acc * 100 + {d - 97i8} as u64, lim -1)
+                },
+                _ => Some(acc),
             }
         }
-        result($start as u64)
+        result($start as u64, $limit)
     });
 }
 
