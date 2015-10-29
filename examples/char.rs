@@ -10,6 +10,7 @@ extern crate io;
 
 fn main() {
     if let Some(c) = read_character!() {
-        writeln_character!(&c);
+        write_character!(c);
+        write_character!('\n');
     }
 }

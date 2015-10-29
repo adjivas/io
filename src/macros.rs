@@ -110,7 +110,7 @@ macro_rules! write_character {
         write_character!($character, 1)
     });
     ($character: expr, $out: expr) => ({
-        write!($character, 1, $out)
+        write!([$character].as_ptr(), 1, $out)
     });
 }
 
@@ -123,7 +123,7 @@ macro_rules! writeln_character {
         writeln_character!($character, 1)
     });
     ($character: expr, $out: expr) => ({
-        write!($character, 1, $out) && write!("\n".as_ptr(), $out)
+        write!([$character].as_ptr(), 1, $out) && write!("\n".as_ptr(), $out)
     });
 }
 
