@@ -101,6 +101,32 @@ macro_rules! writeln_number {
     });
 }
 
+/// The `write_character` macro writes to output the character
+/// and returns the Some 0i32 or None according to success.
+
+#[macro_export]
+macro_rules! write_character {
+    ($character: expr) => ({
+        write_character!($character, 1)
+    });
+    ($character: expr, $out: expr) => ({
+        write!($character, 1, $out)
+    });
+}
+
+/// The `write_character` macro writes to output the character with a breakline
+/// and returns the Some 0i32 or None according to success.
+
+#[macro_export]
+macro_rules! writeln_character {
+    ($character: expr) => ({
+        writeln_character!($character, 1)
+    });
+    ($character: expr, $out: expr) => ({
+        write!($character, 1, $out) && write!("\n".as_ptr(), $out)
+    });
+}
+
 /// The `write_error` macro writes to output the error
 /// and returns the Some 0i32 or None according to success.
 
@@ -191,7 +217,8 @@ macro_rules! read_number {
         }
     });
     ($start: expr) => ({
-        read_number!($start, 17)
+        extern crate io;
+        read_number!($start, io::ffi::BUFF_READ_NUMBER)
     });
     ($start: expr, $limit: expr) => ({
         fn result (
@@ -226,7 +253,8 @@ macro_rules! read_command {
         }
     });
     ($start: expr) => ({
-        read_command!($start, 9)
+        extern crate io;
+        read_command!($start, io::ffi::BUFF_READ_COMMAND)
     });
     ($start: expr, $limit: expr) => ({
         fn result (
@@ -236,11 +264,8 @@ macro_rules! read_command {
             match {
                 (read_character!(), lim)
             } {
-                (Some(d @  97...107), lim) if lim != 0 => {
+                (Some(d @  97...122), lim) if lim != 0 => {
                     result(10 + acc * 100 + {d - 97i8} as u64, lim -1)
-                },
-                (Some(d @ 107...122), lim) if lim != 0 => {
-                    result(20 + acc * 100 + {d - 97i8} as u64, lim -1)
                 },
                 _ => Some(acc),
             }

@@ -17,6 +17,8 @@ pub const NCCS: usize = 32;
 /// are default values for macros.
 
 pub const BUFF: usize = 2048;
+pub const BUFF_READ_NUMBER: usize = 17;
+pub const BUFF_READ_COMMAND: usize = 9;
 pub const STDIN_FILENO: i32 = 0;
 
 #[repr(C)]
