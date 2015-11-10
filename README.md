@@ -1,6 +1,7 @@
 # In/Out-Put
 
 [![Build Status](https://travis-ci.org/adjivas/io.svg)](https://travis-ci.org/adjivas/io)
+[![Circle CI](https://circleci.com/gh/adjivas/io/tree/master.svg?style=svg)](https://circleci.com/gh/adjivas/io/tree/master)
 [![GPLv3 License](http://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
 
 #### How to build:

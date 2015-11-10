@@ -1,0 +1,7 @@
+dependencies:
+    override:
+        - curl -sS https://static.rust-lang.org/rustup.sh | sudo bash
+
+test:
+    override:
+        - cargo build --verbose
