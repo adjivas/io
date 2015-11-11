@@ -5,3 +5,6 @@ authors = ["adjivas <adjivas@users.noreply.github.com>"]
 description = "ffi library of write(2) and lseek(2)/read(2)"
 license = "gpl-3.0"
 repository = "https://github.com/adjivas/io"
+
+[features]
+synesthesia = []

@@ -65,6 +65,7 @@ macro_rules! write_number {
     ($number: expr) => ({
         write_number!($number, 1)
     });
+    #[cfg(not(feature = "synesthesia"))]
     ($number: expr, $out: expr) => ({
         let mut decimal = $number;
         let mut buf: [u8; 64] = [0; 64];
@@ -85,6 +86,35 @@ macro_rules! write_number {
             }
         }
         result
+    });
+    #[cfg(feature = "synesthesia")]
+    ($number: expr, $out: expr) => ({
+        let mut decimal = $number;
+        let mut buf: [u8; 384] = [0; 384]; // 64*6
+        let mut result: bool = false;
+
+        for target in {0i32..{384}}.rev().filter(|&x| x % 6 == 0) {
+            let digit: u8 = {decimal % 10 + 48} as u8;
+
+            buf[{target-5} as usize] = b'\x1B';
+            buf[{target-4} as usize] = b'[';
+            buf[{target-3} as usize] = b'3';
+            buf[{target-2} as usize] = digit;
+            buf[{target-1} as usize] = b'm';
+            buf[{target-0} as usize] = digit;
+            decimal /= 10;
+            if decimal == 0 {
+                result = write! (
+                    buf.as_ptr().offset (
+                        {target-5} as isize
+                    ),
+                    384 - target,
+                    $out
+                );
+                break ;
+            }
+        }
+        result && writeln!("\x1B[0m".as_ptr(), 4)
     });
 }
 
@@ -132,6 +162,7 @@ macro_rules! writeln_character {
 
 #[macro_export]
 macro_rules! write_err {
+    #[cfg(not(feature = "synesthesia"))]
     ($text: expr) => ({
         let mut result: bool = false;
 
@@ -145,8 +176,30 @@ macro_rules! write_err {
         }
         result
     });
+    #[cfg(feature = "synesthesia")]
+    ($text: expr) => ({
+        let mut result: bool = false;
+
+        for len in 0i32..std::i32::MAX {
+            if unsafe {
+                *$text.offset(len as isize)
+            } == 0u8 {
+                result = writeln!("\x1B[31m".as_ptr(), 5)
+                      && write_err!($text, len);
+                break ;
+            }
+        }
+        result && writeln!("\x1B[0m".as_ptr(), 4)
+    });
+    #[cfg(not(feature = "synesthesia"))]
     ($text: expr, $len: expr) => ({
         write!($text, $len, 2)
+    });
+    #[cfg(feature = "synesthesia")]
+    ($text: expr, $len: expr) => ({
+        writeln!("\x1B[31m".as_ptr(), 5) &&
+        write!($text, $len, 2) &&
+        writeln!("\x1B[0m".as_ptr(), 4)
     });
 }
 
