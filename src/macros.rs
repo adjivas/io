@@ -61,11 +61,11 @@ macro_rules! writeln {
 /// and returns the Some 0i32 or None according to success.
 
 #[macro_export]
+#[cfg(not(feature = "synesthesia"))]
 macro_rules! write_number {
     ($number: expr) => ({
         write_number!($number, 1)
     });
-    #[cfg(not(feature = "synesthesia"))]
     ($number: expr, $out: expr) => ({
         let mut decimal = $number;
         let mut buf: [u8; 64] = [0; 64];
@@ -87,7 +87,14 @@ macro_rules! write_number {
         }
         result
     });
-    #[cfg(feature = "synesthesia")]
+}
+
+#[macro_export]
+#[cfg(feature = "synesthesia")]
+macro_rules! write_number {
+    ($number: expr) => ({
+        write_number!($number, 1)
+    });
     ($number: expr, $out: expr) => ({
         let mut decimal = $number;
         let mut buf: [u8; 384] = [0; 384]; // 64*6
@@ -161,8 +168,8 @@ macro_rules! writeln_character {
 /// and returns the Some 0i32 or None according to success.
 
 #[macro_export]
+#[cfg(not(feature = "synesthesia"))]
 macro_rules! write_err {
-    #[cfg(not(feature = "synesthesia"))]
     ($text: expr) => ({
         let mut result: bool = false;
 
@@ -176,7 +183,14 @@ macro_rules! write_err {
         }
         result
     });
-    #[cfg(feature = "synesthesia")]
+    ($text: expr, $len: expr) => ({
+        write!($text, $len, 2)
+    });
+}
+
+#[macro_export]
+#[cfg(feature = "synesthesia")]
+macro_rules! write_err {
     ($text: expr) => ({
         let mut result: bool = false;
 
@@ -191,11 +205,6 @@ macro_rules! write_err {
         }
         result && writeln!("\x1B[0m".as_ptr(), 4)
     });
-    #[cfg(not(feature = "synesthesia"))]
-    ($text: expr, $len: expr) => ({
-        write!($text, $len, 2)
-    });
-    #[cfg(feature = "synesthesia")]
     ($text: expr, $len: expr) => ({
         writeln!("\x1B[31m".as_ptr(), 5) &&
         write!($text, $len, 2) &&
