@@ -7,14 +7,15 @@
 #### How to build:
 ```shell
 git clone https://github.com/adjivas/io.git io && cd io
-cargo build
+- cargo build // Without feature.
+- cargo build --features synesthesia // With the synesthesia' feature.
 ```
 
 #### How to use:
 * cargo run --example char < <(echo 'a')
 * cargo run --example line < <(echo "hello")
 * cargo run --example number < <(echo 42)
-* cargo run --example number < <(echo $SECRET)
+* cargo run --example pass < <(echo $SECRET)
 
 #### Directory-Tree:
 ```shell
@@ -24,10 +25,12 @@ cargo build
 |__ README.md
 |__ examples
 |   |__ char.rs
+|   |__ command.rs
+|   |__ error.rs
 |   |__ line.rs
-|   |__ pass.rs
 |   |__ number.rs
-|   \__ command.rs
+|   |__ pass.rs
+|   \__ write.rs
 \__ src
     |__ ffi.rs
     |__ macros.rs
