@@ -1,6 +1,6 @@
 # In/Out-Put
 
-[![docs-badge][]][docs] [![license-badge][]][license] [![travis-badge][]][travis] [![circle-badge][]][circle]
+[![Crate][crate-badge]][crate] [![docs-badge][]][docs] [![license-badge][]][license] [![travis-badge][]][travis] [![circle-badge][]][circle]
 
 #### How to build:
 ```shell
@@ -38,6 +38,8 @@ git clone https://github.com/adjivas/io.git io && cd io
 #### License:
 *io*'s code in this repo uses the [GNU GPL v3](http://www.gnu.org/licenses/gpl-3.0.html) [license](https://github.com/adjivas/io/blob/master/LICENSE).
 
+[crate-badge]: https://img.shields.io/badge/crates.io-v0.1.0-orange.svg?style=flat-square
+[crate]: https://crates.io/crates/io-synesthesist
 [docs-badge]: https://img.shields.io/badge/API-docs-blue.svg?style=flat-square
 [docs]: http://adjivas.github.io/io/io
 [license-badge]: http://img.shields.io/badge/license-GPLv3-blue.svg?style=flat-square

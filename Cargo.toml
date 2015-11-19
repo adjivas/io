@@ -1,10 +1,14 @@
 [package]
-name = "io"
+name = "io-synesthesist"
 version = "0.1.0"
 authors = ["adjivas <adjivas@users.noreply.github.com>"]
 description = "ffi library of write(2) and lseek(2)/read(2)"
-license = "gpl-3.0"
-repository = "https://github.com/adjivas/io"
+documentation = "http://adjivas.github.io/io/io"
+repository = "https://github.com/adjivas/io.git"
+readme = "README.md"
+keywords = ["write", "read", "lseek"]
+license = "GPL-3.0"
+
 
 [features]
 synesthesia = []
