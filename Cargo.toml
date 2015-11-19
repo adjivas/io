@@ -1,6 +1,6 @@
 [package]
 name = "io-synesthesist"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["adjivas <adjivas@users.noreply.github.com>"]
 description = "ffi library of write(2) and lseek(2)/read(2)"
 documentation = "http://adjivas.github.io/io/io"
