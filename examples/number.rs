@@ -6,7 +6,7 @@
 // except according to those terms.
 
 #[macro_use]
-extern crate io;
+extern crate io_synesthesist;
 
 fn main() {
     if let Some(c) = read_number!() {

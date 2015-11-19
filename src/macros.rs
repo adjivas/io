@@ -27,7 +27,7 @@ macro_rules! write {
         write!($text, $len, 1)
     });
     ($text: expr, $len: expr, $out: expr) => ({
-        extern crate io;
+        extern crate io_synesthesist as io;
         match unsafe {
             io::ffi::write (
                 $out as i32,
@@ -234,7 +234,7 @@ macro_rules! read {
         read!($len, 0)
     });
     ($len: expr, $ins: expr) => ({
-        extern crate io;
+        extern crate io_synesthesist as io;
         let line: [i8; io::ffi::BUFF] = [0; io::ffi::BUFF];
 
         match unsafe {
@@ -279,7 +279,7 @@ macro_rules! read_number {
         }
     });
     ($start: expr) => ({
-        extern crate io;
+        extern crate io_synesthesist as io;
         read_number!($start, io::ffi::BUFF_READ_NUMBER)
     });
     ($start: expr, $limit: expr) => ({
@@ -315,7 +315,7 @@ macro_rules! read_command {
         }
     });
     ($start: expr) => ({
-        extern crate io;
+        extern crate io_synesthesist as io;
         read_command!($start, io::ffi::BUFF_READ_COMMAND)
     });
     ($start: expr, $limit: expr) => ({
@@ -326,6 +326,9 @@ macro_rules! read_command {
             match {
                 (read_character!(), lim)
             } {
+                (Some(d @  65...90), lim) if lim != 0 => {
+                    result(10 + acc * 100 + {d - 65i8} as u64, lim -1)
+                },
                 (Some(d @  97...122), lim) if lim != 0 => {
                     result(10 + acc * 100 + {d - 97i8} as u64, lim -1)
                 },
@@ -342,7 +345,7 @@ macro_rules! read_command {
 #[macro_export]
 macro_rules! ioctl {
     () => ({
-        extern crate io;
+        extern crate io_synesthesist as io;
         let mut term = Box::new(io::ffi::Termios {
             c_iflag: 0,
             c_oflag: 0,
@@ -365,7 +368,7 @@ macro_rules! ioctl {
         term
     });
     ($req: expr, $term: expr) => ({
-        extern crate io;
+        extern crate io_synesthesist as io;
         unsafe {
             io::ffi::ioctl (
                 io::ffi::STDIN_FILENO,
