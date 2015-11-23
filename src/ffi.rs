@@ -6,7 +6,6 @@
 // except according to those terms.
 
 #![allow(dead_code)]
-#![allow(non_camel_case_types)]
 
 /// The `NCCS` const is the default number of character
 /// parsed by the password input.
@@ -183,9 +182,10 @@ pub enum Seek {
 /// by the standard in/out put.
 
 #[cfg(any(unix))]
+#[link(name = "c")]
 extern "C" {
-    pub fn write(fd: i32, buf: *const i8, len: i32) -> i32;
+    pub fn write(fd: i32, buf: *const u8, len: i32) -> i32;
     pub fn lseek(fd: i32, offset: u64, whence: i32) -> u64;
-    pub fn read(fd: i32, buf: *mut i8, len: i32) -> i32;
+    pub fn read(fd: i32, buf: *mut u8, len: i32) -> i32;
     pub fn ioctl(fd: i32, req: u64, term: *mut Termios) -> i32;
 }
